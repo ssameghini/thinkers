@@ -1,31 +1,19 @@
+/* Header config */
+
 .App {
   text-align: center;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  max-width: 50px;
+  display: inline;
+  margin-right: 15px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
 }
 
 @keyframes App-logo-spin {
@@ -35,4 +23,162 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+#thinkers-sign {
+  font-size: 1.5rem;
+  color: purple;
+  display: inline;
+}
+
+header {
+  position: fixed;
+  top: 0px;
+  z-index: 10;
+  background-color: #282c34;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#navbar {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: nowrap;
+}
+
+#navbar a {
+  padding: 20px;
+  font-size: 1.5rem;
+  color: grey;
+  text-decoration: none;
+  border-radius: 15px;
+}
+
+#navbar a:hover {
+  background-color: lightslategray;
+  color: black;
+}
+
+.active-nav-link {
+  background-color: lightslategray;
+  font-weight: bold;
+  color: purple !important;
+}
+
+#user-options {
+  position: absolute;
+  z-index: 9;
+  background-color: lightslategray;
+  opacity: 0.8;
+  width: auto;
+}
+
+#user-options li {
+  list-style: none;
+  padding-right: 20px;
+  margin-top: 20px;
+}
+
+#user-options a {
+  font-size: 0.8em;
+  color: blue;
+}
+
+/* Feed config */
+.mainpage-flex {
+  display: flex;
+  position: relative;
+  top: 100px;
+  align-items: center;
+}
+
+#feed {
+  margin: 50px auto 30px 80px;
+}
+
+.post {
+  margin-top: 40px;
+  padding: 20px;
+  border: 2px blue;
+  border-style: double;
+  border-radius: 13%;
+  background-color: whitesmoke;
+  width: fit-content;
+}
+
+.post-message {
+  text-align: end;
+}
+
+.post-date {
+  font-size: 0.7rem;
+}
+
+#send {
+  position: sticky;
+  top: 90px;
+  bottom: 0px;
+  right: 20px;
+  width: 40%;
+  border-radius: 15px;
+  height: fit-content;
+  background-color: wheat;
+  padding-top: 15px;
+  padding-bottom: 20px;
+}
+
+#send form {
+  width: 80%;
+  margin: auto;
+}
+
+#send-text {
+  width: 100%;
+}
+
+/* User's page config */
+.mainpage-grid {
+  position: absolute;
+  top: 100px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 200px auto;
+}
+
+.profile-banner {
+  margin: 0;
+  grid-row: 1 / span 1;
+  grid-column: 1 / span 4;
+}
+
+.profile-banner img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.side-navbar {
+  grid-row: 2 / auto;
+  grid-column: 1 / span 1;
+  text-align: center;
+}
+
+.side-navbar li {
+  margin-top: 30px;
+  list-style: none;
+}
+
+.side-navbar button {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.user-posts {
+  grid-row: 2 / auto;
+  grid-column: 3 / span 2;
 }
