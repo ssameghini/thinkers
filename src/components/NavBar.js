@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavLink, Link } from 'react-router-dom';
 import logo from '../resources/images/logo.png';
 
-function NavBar() {
+function NavBar(props) {
     let [ isShown, setIsShown ] = useState(false);
     
     return (
@@ -18,21 +18,23 @@ function NavBar() {
                 <NavLink to='/user' activeClassName='active-nav-link' 
                     onMouseEnter={() => { setIsShown(true) }}
                     onMouseLeave={() => { setIsShown(false) }}>
-                    User
-                    { isShown && <UserOptions />}
+                    { props.user ? props.user.firstName : 'User' }
+                    { isShown && <UserOptions>
+                        <Link to='/' onClick={() => props.onLogOut()}>Logout</Link>
+                    </UserOptions>}
                     </NavLink>
             </nav>
         </header>
     );
 }
 
-function UserOptions() {
+function UserOptions(props) {
     return(
         <nav id='user-options'>
             <ul>
                 <li><Link to='/profile'>My Profile</Link></li>
                 <li><Link to='/settings'>Settings</Link></li>
-                <li><Link to='/'>Logout</Link></li>
+                <li>{props.children}</li>
             </ul>
         </nav>
     )

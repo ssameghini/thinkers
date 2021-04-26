@@ -58,7 +58,7 @@ export default class Feed extends Component {
 
     render() {
         return(
-            <div className='mainpage-flex'>
+            <div className='mainpage mainpage-flex'>
                 <section id='feed'>
                     { this.postsList() }
                 </section>

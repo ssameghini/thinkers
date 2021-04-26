@@ -1,23 +1,40 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const mongoose = require('mongoose');
-
-const myDataBase = require('./connection');
-const routes = require('./routes');
-const auth = require('./auth');
-const User = require('./models/user.model');
-const Post = require('./models/post.model');
-
 const cors = require('cors');
+const passport = require('passport');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const store = new MongoStore({ url: process.env.MONGO_URI });
+
+// Authenticators and Routers
+const main = require('./connection');
+const auth = require('./auth');
+const router = require('./routes');
+
 app.use(cors());
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
 
-app.use(express.urlencoded());
-app.use(express.static('../public'));
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 },
+    key: 'thinkers.id',
+    store: store
+}));
 
-myDataBase(async (User) => {
-    auth(app, )
-    routes(app, );
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+main(async function() {
+    await auth();
+    app.use('/', router);
+    
+}).catch(e =>{
+    console.log(e);
 });
 
 app.listen(process.env.PORT, () => {

@@ -57,7 +57,7 @@ class User extends Component {
 
     render() {
         return(
-            <div className='mainpage-grid'>
+            <div className='mainpage mainpage-grid'>
                 <figure className='profile-banner'>
                     <img src={imgsrc} alt='profile' />
                     <figcaption>{this.state.username}</figcaption>
