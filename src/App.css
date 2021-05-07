@@ -11,7 +11,7 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
+  .logo-spin {
     animation: App-logo-spin infinite 20s linear;
   }
 }
@@ -25,7 +25,7 @@
   }
 }
 
-#thinkers-sign {
+.thinkers-sign {
   font-size: 1.5rem;
   color: purple;
   display: inline;
@@ -34,7 +34,7 @@
 header {
   position: fixed;
   top: 0px;
-  z-index: 10;
+  z-index: 8;
   background-color: #282c34;
   width: 100%;
   display: flex;
@@ -71,7 +71,7 @@ header {
 
 #user-options {
   position: absolute;
-  z-index: 9;
+  z-index: 5;
   background-color: lightslategray;
   opacity: 0.8;
   width: auto;
@@ -187,7 +187,13 @@ header {
 }
 
 /* Auth page */
-.mainpage > * {
+.authpage {
+  width: 100%;
+  margin-top: 40px;
+  margin-bottom: 150px;
+}
+
+.authpage > * {
   text-align: center;
 }
 
@@ -212,4 +218,43 @@ header {
 .error-box {
   background-color: darkred;
   color: white;
+}
+
+/* Loading Page */
+#loading-page {
+  max-width: 100%;
+  height: 100%;
+  position: relative;
+  top: -25px;
+  z-index: 10;
+  background-color: #3e4144;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 30px;
+}
+
+#loading-page > * {
+  margin: 0px auto;
+  display: block;
+}
+
+.loading-logo{
+  width: 100px;
+  margin-right: 15px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .loading-icon {
+    animation: loading-icon-spin infinite 20s linear;
+  }
+}
+
+@keyframes loading-icon-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

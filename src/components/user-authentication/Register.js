@@ -68,10 +68,10 @@ class Register extends Component {
 
         axios.post('http://localhost:5000/register', user)
             .then(response => {
+                console.log(response.data);
                 if(response.data.username) {
-                    //let registeredUser = response.data;
                     this.setState({ register: { error: false }});
-                    //this.props.onRegistered(registeredUser);
+                    window.location = '/';
                 } else {
                     this.setState({ register: { error: true, message: response.data }});
                 }

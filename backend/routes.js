@@ -1,69 +1,59 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const passport = require('passport');
 
 const User = require('./models/user.model');
-// const Post = require('./models/post.model');
+const Post = require('./models/post.model');
 
-router.route('/').get(async (req, res) => {
-    console.log(req.session);
-    if (req.isAuthenticated()) {
-        res.json(req.user);
-    } else {
-        res.json('/auth');
-    }
-});
-
-router.route('/register').post(async (req, res, next) => {
-    let { firstName, lastName, email, username, password } = req.body;
-
-    User.findOne({ $or: [{ username }, { email }]}, async (err, user) => {
-        console.log(user);
-        if (err) {
-            res.json(err);
-        } else if (user.username) {
-            res.json('Username or email already registered.');
+module.exports = function routing(passport) {
+    router.route('/auth').get((req, res, next) => {
+        if (req.isAuthenticated()) {
+            res.json(req.user);
         } else {
-            const hash = await bcrypt.hash(password, 12).catch(e => res.json(e.name));
-            const user = new User({
-                firstName,
-                lastName,
-                email,
-                username,
-                password: hash
-            });
-            await user.save()
-                .catch(e => {
-                    res.json(e.name);
-                });
-            next(user.username, user.password);
+            res.json(null);
         }
     });
-},
-function(req, res, next ){
-    passport.authenticate('local', { failureRedirect: '/register', successRedirect: '/' }, function(err, user, info) {
-      if (err) { return res.json(err) }
-      if (!user) { return res.json( { message: info.message }) }
-      res.json(user);
-    })(req, res, next);   
-});
 
-router.route('/login').post(
-    function(req, res, next ){
-        passport.authenticate('local', { failureRedirect: '/', successRedirect: '/' }, function(err, user, info) {
-          if (err) { return res.json(err) }
-          if (!user) { return res.json( { message: info.message }) }
-          res.json(user);
-        })(req, res, next);   
-    }
-);
+    router.route('/register').post((req, res, next) => {
+        console.log(req.body);
+        User.findOne({ username: req.body.username }, async (err, doc) => {
+            if (err) throw err;
+            if (doc) res.send("User already exists");
+            if (!doc) {
+                const salt = await bcrypt.genSalt(10);
+                const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-router.route('/logout').get(
-    function(req, res, next) {
-        req.logout();
-        res.json('Logged out');
-        next();
-    }
-);
+                const newUser = new User({
+                    username: req.body.username,
+                    password: hashedPassword
+                });
 
-module.exports = router;
+                newUser.save()
+                    .then(user => {
+                        req.logIn(user);
+                        res.json(req.user);
+                    })
+                    .catch(e => console.log(e))
+            }
+        })
+        .catch(e => console.log(e));
+    });
+
+    router.route('/login').post((req, res, next) => {
+        passport.authenticate('local', (err, user, info) => {
+            if (err) { throw err }
+            else if (!user) { res.send('No user found') }
+            else if (user) {
+                res.send('Successfully authenticated');
+                console.log(req.user);
+            }
+        })(req, res, next);
+    });
+
+    router.route('/logout').get((req, res, next) => {
+        req.logOut();
+        req.session = null;
+        res.redirect('/');
+    });
+
+    return router;
+};

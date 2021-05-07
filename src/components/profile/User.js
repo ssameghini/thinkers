@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import Post from '../posts/Post';
 import SendBox from '../posts/Send';
 import imgsrc from '../../resources/images/seba-perfil-2.png';

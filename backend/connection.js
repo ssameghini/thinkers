@@ -15,8 +15,8 @@ module.exports = async function main(callback) {
             console.log('Connection succesfull');
         });
 
-        /* await User.deleteMany();
-        await Post.deleteMany(); */
+        await User.deleteMany();
+        await Post.deleteMany();
 
         callback();
 

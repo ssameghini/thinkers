@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 
 class Login extends Component {
@@ -37,14 +37,15 @@ class Login extends Component {
             password: this.state.password
         };
 
-        axios.post('http://localhost:5000/login', user)
+        axios.post('http://localhost:5000/login', user, { withCredentials: true })
             .then(res => {
                 if(res.data.username) {
-                    this.setState({ logInError: false });
+                    this.setState({ logInError: false, username: '', password: '' });
                     this.props.onLogIn(res.data);
-                    this.setState({ username: '', password: ''})
+                    window.location = '/';
                 } else {
-                    this.setState({ logInError: true, errorMessage: res.data.message });
+                    console.log(res.data);
+                    this.setState({ logInError: true, errorMessage: res.data });
                 }
             })
             .catch(e => {

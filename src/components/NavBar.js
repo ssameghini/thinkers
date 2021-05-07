@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { NavLink, Link } from 'react-router-dom';
 import logo from '../resources/images/logo.png';
 
@@ -8,8 +8,8 @@ function NavBar(props) {
     return (
         <header>
             <figure>
-                <img src={logo} alt='' className='App-logo'/>
-                <figcaption id='thinkers-sign'><em>Thinkers</em></figcaption>
+                <img src={logo} alt='' className='App-logo logo-spin'/>
+                <figcaption className='thinkers-sign'><em>Thinkers</em></figcaption>
             </figure>
             <nav id='navbar'>
                 <NavLink to='/' exact activeClassName='active-nav-link'>My Feed</NavLink>
@@ -18,7 +18,7 @@ function NavBar(props) {
                 <NavLink to='/user' activeClassName='active-nav-link' 
                     onMouseEnter={() => { setIsShown(true) }}
                     onMouseLeave={() => { setIsShown(false) }}>
-                    { props.user ? props.user.firstName : 'User' }
+                    { props.user ? props.user.firstName : 'Log In' }
                     { isShown && <UserOptions>
                         <Link to='/' onClick={() => props.onLogOut()}>Logout</Link>
                     </UserOptions>}
