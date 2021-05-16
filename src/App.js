@@ -19,7 +19,7 @@ class App extends React.Component {
     this.logOut = this.logOut.bind(this);
 
     this.state = {
-      userLogged: null
+      userLogged: {}
     }
   }
 

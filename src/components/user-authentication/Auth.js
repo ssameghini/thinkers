@@ -4,14 +4,14 @@ import Login from './Login';
 
 export default function Auth(props) {
     const user = props.user;
-    const [loggedOut, setLoggedOut] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(false);
 
     useEffect(() => {
         console.log(user);
         if (user !== null) {
-            setLoggedOut(true);
+            setLoggedIn(true);
         } else if (user === null) {
-            setLoggedOut(false);
+            setLoggedIn(false);
         }
     }, [user]);
     
@@ -21,8 +21,8 @@ export default function Auth(props) {
             <h3>A troubled and despaired social web 
                 for sharing your thougths</h3>
 
-            {loggedOut && 
-            <div className='error-box'><span>You've been logged out.</span></div>
+            {loggedIn && 
+            <div className='error-box'><span>You're already logged in, {user.firstName}</span></div>
             }
 
             <div className='auth-flex'>

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from 'axios';
 import Post from './Post';
 import SendBox from './Send';
 
@@ -7,8 +8,6 @@ export default class Feed extends Component {
         super(props);
 
         this.postsList = this.postsList.bind(this);
-        this.onChangeHandle = this.onChangeHandle.bind(this);
-        this.onSubmitHandle = this.onSubmitHandle.bind(this);
 
         this.state = {
             posts : [{
@@ -25,8 +24,7 @@ export default class Feed extends Component {
                 author: 'Zorro',
                 message: 'Auuuu',
                 date: new Date().toString()
-            }],
-            send: ''
+            }]
         };
     }
     
@@ -36,24 +34,38 @@ export default class Feed extends Component {
         });
     }
 
+    componentDidMount() {
+        axios.get('http://localhost:5000/feed-posts', { withCredentials: true })
+            .then(res => {
+                console.log(res.data);
+                const postsQueried = res.data;
+                if (postsQueried.length < 1) {
+                    return;
+                } else {
+                    let newPostsArray = [];
+                    let date= '';
 
-    onChangeHandle(e) {
-        this.setState({send: e.target.value});
-    }
-
-    onSubmitHandle(e) {
-        e.preventDefault();
-        let author = 'Unidentified user';
-        let date = new Date().toString();
-        let message = this.state.send;
-
-        this.setState({posts: [...this.state.posts, {
-            author,
-            message,
-            date
-        }]});
-
-        this.setState({send: ''});
+                    postsQueried.forEach(post => {
+                        if (post.date) {
+                            let yearMonthDay  = post.date.slice(0, 10);
+                            let hour = post.date.slice(11, 20);
+                            date = `${yearMonthDay} at ${hour}`;
+                        } else {
+                            let newDate = new Date().toString();
+                            let yearMonthDay  = newDate.slice(0, 10);
+                            let hour = newDate.slice(11, 20);
+                            date = `${yearMonthDay} at ${hour}`;
+                        }
+                        newPostsArray.push({
+                            author: post.username,
+                            message: post.message,
+                            date: date
+                        });
+                    });
+                    this.setState({posts: newPostsArray});
+                }
+            })
+            .catch(e => console.log(e));
     }
 
     render() {
@@ -62,7 +74,7 @@ export default class Feed extends Component {
                 <section id='feed'>
                     { this.postsList() }
                 </section>
-                <SendBox onChange={this.onChangeHandle} onSubmit={this.onSubmitHandle} value={this.state.send}/>
+                <SendBox location={this.props.location.pathname}/>
             </div>
         )
     }

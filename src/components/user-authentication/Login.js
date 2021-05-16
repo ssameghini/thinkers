@@ -67,7 +67,7 @@ class Login extends Component {
                         <span>Problem: <em>{this.state.errorMessage}</em></span>
                     </div> }
                 
-                <label for='login-username'>Username:</label>
+                <label htmlFor='login-username'>Username:</label>
                 <input 
                     type='text'
                     id='login-username'
@@ -75,7 +75,7 @@ class Login extends Component {
                     value={this.state.username}
                     onChange={this.onChangeUsername}
                     required/>
-                <label for='login-password'>Enter your password:</label>
+                <label htmlFor='login-password'>Enter your password:</label>
                 <input 
                     type='password' 
                     id='login-password' 

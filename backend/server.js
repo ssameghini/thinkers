@@ -6,6 +6,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const User = require('./models/user.model');
+const Post = require('./models/post.model');
 const MongoStore = require('connect-mongodb-session')(session);
 const bcrypt = require('bcrypt');
 
@@ -57,13 +58,18 @@ app.use(passport.session());
 // ------------------- Passport Authentication and Routing ----------------------
 require('./passport-config')(passport);
 
-app.get('/auth', (req, res) => {
-    console.log(req.session, req.user);
+function checkAuthenticated(req, res, next) {
     if (req.user) {
-        res.send(req.user);
+        next();
     } else {
         res.json(null);
+        res.end();
     }
+}
+
+app.get('/', checkAuthenticated, (req, res) => {
+    console.log(req.session, req.user);
+    res.send(req.user);
 });
 
 app.post('/register', (req, res) => {
@@ -109,6 +115,70 @@ app.get('/logout', (req, res) => {
     req.session = null;
     res.clearCookie('thinkers.id');
     res.send('You have logged out successfully');
+});
+
+app.get('/user-posts', checkAuthenticated, (req, res) => {
+    Post.find({ username: req.user.username }, {message: 1, username: 1, date: 1, _id: 0})
+        .sort({ date: -1 })
+        .then(docs => {
+            if(docs.length > 0) {
+                docs.forEach(doc => {
+                    /* Luego habrá que cambiar por una pipeline de 
+                    'lookup' para tener el firstName actualizado */
+                    doc.username = req.user.firstName;
+                });
+            }
+            console.log(docs);
+            res.json(docs);
+        })
+        .catch(e => console.log(e));
+});
+
+const feedPipeline = [
+    {
+        $lookup: {
+            from: 'users',
+            let: { username: '$username'},
+            pipeline: [
+                {
+                    $match: {$expr: {$eq: ['$username', '$$username']}}
+                }
+            ],
+            as: 'user'
+        }
+    }, {
+        $sort: { date: -1}
+    }
+];
+
+// Hasta desarrollar un sistema de contactos, el feed será la totalidad de los Posts
+app.get('/feed-posts', checkAuthenticated, (req, res) => {
+    Post.aggregate(feedPipeline)
+        .then(docs => {
+            if(docs.length > 0) {
+                docs.forEach(doc => {
+                    doc.username = doc.user[0].firstName;
+                    delete doc.user;
+                    delete doc._id;
+                    delete doc.__v;
+                });
+            }
+            console.log(docs);
+            res.json(docs);
+        })
+        .catch(e => console.log(e));
+});
+
+app.post('/posts', checkAuthenticated, (req, res) => {
+    let newPost = new Post({
+        username: req.user.username,
+        message: req.body.message,
+        date: req.body.date
+    });
+    console.log(newPost);
+    newPost.save()
+        .then(post => res.json(post))
+        .catch(e => console.log(e));
 });
 
 

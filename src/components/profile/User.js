@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from 'axios';
 import Post from '../posts/Post';
 import SendBox from '../posts/Send';
 import imgsrc from '../../resources/images/seba-perfil-2.png';
@@ -8,26 +9,28 @@ class User extends Component {
         super(props);
 
         this.postsList = this.postsList.bind(this);
-        this.onChangeHandle =this.onChangeHandle.bind(this);
-        this.onSubmitHandle = this.onSubmitHandle.bind(this);
+        this.updatePostsList = this.updatePostsList.bind(this);
 
         this.state = {
-            username: 'Seba',
+            username: '',
             posts: [{
-                author: 'Sebas',
-                message: 'Hey, there!',
+                author: 'Thinkers',
+                message: 'Come on! Say something!',
                 date: new Date().toString()
-            },{
-                author: 'Sebas',
-                message: 'Another post',
-                date: new Date('2017-12-02').toString()
-            },{
-                author: 'Sebas',
-                message: 'Older post',
-                date: new Date('2015-12-02').toString()
-            }],
-            send: ''
+            }, {
+                author: 'Thinkers',
+                message: 'You haven\'t posted anything yet!',
+                date: (new Date() - 30000).toString()
+            }, {
+                author: 'Thinkers',
+                message: '*Struggling*',
+                date: (new Date() - 60000).toString()
+            }]
         };
+    }
+
+    updatePostsList(post){
+        this.setState({posts: [post, ...this.state.posts]});
     }
 
     postsList() {
@@ -36,23 +39,38 @@ class User extends Component {
         });
     }
 
-    onChangeHandle(e){
-        this.setState({send: e.target.value});
-    }
+    componentDidMount() {
+        axios.get('http://localhost:5000/user-posts', { withCredentials: true })
+            .then(res => {
+                console.log(res.data);
+                const postsQueried = res.data;
+                if (postsQueried.length < 1) {
+                    return;
+                } else {
+                    let newPostsArray = [];
+                    let date= '';
 
-    onSubmitHandle(e){
-        e.preventDefault();
-        let author = this.state.username;
-        let date = new Date().toString();
-        let message = this.state.send;
-
-        this.setState({posts: [{
-            author,
-            message,
-            date
-        }, ...this.state.posts]});
-
-        this.setState({send: ''});
+                    postsQueried.forEach(post => {
+                        if (post.date) {
+                            let yearMonthDay  = post.date.slice(0, 10);
+                            let hour = post.date.slice(11, 20);
+                            date = `${yearMonthDay} at ${hour}`;
+                        } else {
+                            let newDate = new Date().toString();
+                            let yearMonthDay  = newDate.slice(0, 10);
+                            let hour = newDate.slice(11, 20);
+                            date = `${yearMonthDay} at ${hour}`;
+                        }
+                        newPostsArray.push({
+                            author: post.username,
+                            message: post.message,
+                            date: date
+                        });
+                    });
+                    this.setState({posts: newPostsArray});
+                }
+            })
+            .catch(e => console.log(e));
     }
 
     render() {
@@ -70,10 +88,7 @@ class User extends Component {
                     </ul>
                 </nav>
                 <section className='user-posts'>
-                    <SendBox 
-                        onChange={this.onChangeHandle} 
-                        onSubmit={this.onSubmitHandle} 
-                        value={this.state.send}/>
+                    <SendBox location={this.props.location.pathname} onSubmit={this.updatePostsList}/>
                     { this.postsList() }
                     </section>
             </div>

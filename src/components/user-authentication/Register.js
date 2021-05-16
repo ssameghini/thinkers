@@ -98,13 +98,13 @@ class Register extends Component {
                         <span>{this.state.register.message}</span>
                     </div> }
                 <br />
-                <label for='first-name'>First name:</label>
+                <label htmlFor='first-name'>First name:</label>
                 <input id='first-name' name='first-name' type='text' value={this.state.firstName} onChange={this.onChangeFirst} required/>
-                <label for='last-name'>Last name:</label>
+                <label htmlFor='last-name'>Last name:</label>
                 <input id='last-name' name='last-name'type='text' value={this.state.lastName} onChange={this.onChangeLast} required/>
-                <label for='email'>(Optional) Your email:</label>
+                <label htmlFor='email'>(Optional) Your email:</label>
                 <input type='email' name='email' id='email' value={this.state.email} onChange={this.onChangeEmail}/>
-                <label for='register-username'>Select your username:</label>
+                <label htmlFor='register-username'>Select your username:</label>
                 <input id='register-username' name='username' type='text' 
                     minLength='8'
                     maxLength='16'
@@ -114,7 +114,7 @@ class Register extends Component {
                     value={this.state.username}
                     onChange={this.onChangeUsername}
                     required/>
-                <label for='register-password'>Define your password:</label>
+                <label htmlFor='register-password'>Define your password:</label>
                 <input id='register-password' type='password' name='password' 
                     minLength='8'
                     pattern='^[A-Za-z0-9_-]{8,}'

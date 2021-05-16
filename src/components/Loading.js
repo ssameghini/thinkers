@@ -8,7 +8,7 @@ export default function Loading(props) {
     const [redirect, setRedirect ] = useState('');
     
     useEffect(() =>  {
-        axios.get('http://localhost:5000/auth', { withCredentials: true })
+        axios.get('http://localhost:5000/', { withCredentials: true })
             .then(res => {
                 let user = res.data;
                 if (res.data !== null) {
