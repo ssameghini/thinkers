@@ -8,7 +8,6 @@ import Loading from './components/Loading'
 import Auth from './components/user-authentication/Auth';
 import Feed from "./components/posts/Feed";
 import Chat from "./components/chat/Chat";
-import Notifications from "./components/notifications/Notifications";
 import User from "./components/profile/User";
 
 class App extends React.Component {
@@ -49,8 +48,6 @@ class App extends React.Component {
           <Route path='/auth'>
             <Auth onLogIn={this.logIn} user={this.state.userLogged}/>
           </Route>
-          <Route path='/chat' component={Chat}/>
-          <Route path='/notifications' component={Notifications}/>
           <Route path='/user' component={User}/>
           <Route render={() => <Redirect to='/'/>}/>
         </Switch>

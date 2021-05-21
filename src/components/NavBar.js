@@ -13,8 +13,6 @@ function NavBar(props) {
             </figure>
             <nav id='navbar'>
                 <NavLink to='/' exact activeClassName='active-nav-link'>My Feed</NavLink>
-                <NavLink to='/chat' activeClassName='active-nav-link'>Chat</NavLink>
-                <NavLink to='/notifications' activeClassName='active-nav-link'>Notifications</NavLink>
                 <NavLink to='/user' activeClassName='active-nav-link' 
                     onMouseEnter={() => { setIsShown(true) }}
                     onMouseLeave={() => { setIsShown(false) }}>
