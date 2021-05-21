@@ -7,9 +7,9 @@ export default function Auth({user, onLogIn}) {
 
     useEffect(() => {
         console.log(user);
-        if (user !== null) {
+        if (user !== false) {
             setLoggedIn(true);
-        } else if (user === null) {
+        } else {
             setLoggedIn(false);
         }
     }, [user]);

@@ -34,6 +34,8 @@ function App () {
         console.log(user);
         if (user) {
           setUserLogged(user);
+        } else {
+          setUserLogged(false);
         }
         // Acá hay un problema: el Efecto logea al usuario de res.data en cualquier caso posible.
         // Efecto a veces buscado, cuando el valor de 'userLogged' es null, pero no cuando es otro usuario logeado.
@@ -41,22 +43,31 @@ function App () {
       .catch(e => console.log(e));
   }, []);
   
-  return (
-    <Router>
-      {userLogged && <NavBar user={userLogged} onLogOut={logOut}/>}
-      <Switch>
-        <Route path='/' exact>
-          <Loading user={userLogged}/>
-        </Route>
-        <Route path='/feed' component={Feed}/>
-        <Route path='/auth'>
-          <Auth onLogIn={logIn} user={userLogged}/>
-        </Route>
-        <Route path='/user' component={User}/>
-        <Route render={() => <Redirect to='/'/>}/>
-      </Switch>
-    </Router>
-  );
+  if (userLogged === null) {
+    return(
+      <Loading/>
+    )
+  } else {
+    return (
+      <Router>
+        <NavBar user={userLogged} onLogOut={logOut}/>
+        <Switch>
+          <Route path='/' exact>
+            {userLogged === false &&
+            <Redirect to='/auth' />}
+            {userLogged.username && 
+            <Redirect to='/feed' />}
+          </Route>
+          <Route path='/feed' component={Feed}/>
+          <Route path='/auth'>
+            <Auth onLogIn={logIn} user={userLogged}/>
+          </Route>
+          <Route path='/user' component={User}/>
+          <Route render={() => <Redirect to='/'/>}/>
+        </Switch>
+      </Router>
+    );
+  }
 }
 
 export default App;

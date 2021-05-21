@@ -2,26 +2,27 @@ import React, { useState } from "react";
 import { NavLink, Link } from 'react-router-dom';
 import logo from '../resources/images/logo.png';
 
-function NavBar(props) {
+function NavBar({user, onLogOut}) {
     let [ isShown, setIsShown ] = useState(false);
     
     return (
         <header>
-            <figure>
+            <figure id='thinkers-brand'>
                 <img src={logo} alt='' className='App-logo logo-spin'/>
-                <figcaption className='thinkers-sign'><em>Thinkers</em></figcaption>
+                <figcaption><em className='thinkers-sign'>Thinkers</em></figcaption>
             </figure>
+            { user && 
             <nav id='navbar'>
                 <NavLink to='/feed' exact activeClassName='active-nav-link'>My Feed</NavLink>
                 <NavLink to='/user' activeClassName='active-nav-link' 
                     onMouseEnter={() => { setIsShown(true) }}
                     onMouseLeave={() => { setIsShown(false) }}>
-                    { props.user ? props.user.firstName : 'Log In' }
+                    { user.firstName }
                     { isShown && <UserOptions>
-                        <Link to='/' onClick={() => props.onLogOut()}>Logout</Link>
+                        <Link to='/' onClick={() => onLogOut()}>Logout</Link>
                     </UserOptions>}
                     </NavLink>
-            </nav>
+            </nav> }
         </header>
     );
 }
