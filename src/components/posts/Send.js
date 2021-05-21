@@ -21,7 +21,7 @@ export default function SendBox (props) {
             .then(res => {
                 console.log(res.data);
                 let post = {
-                    author: res.data.user,
+                    author: res.data.username,
                     message: res.data.message,
                     date: res.data.date.toString()
                 };

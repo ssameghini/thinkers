@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import Register from './Register';
 import Login from './Login';
 
-export default function Auth(props) {
-    const user = props.user;
+export default function Auth({user, onLogIn}) {
     const [loggedIn, setLoggedIn] = useState(false);
 
     useEffect(() => {
@@ -27,7 +26,7 @@ export default function Auth(props) {
 
             <div className='auth-flex'>
                 <Register />
-                <Login onLogIn={props.onLogIn}/>
+                <Login onLogIn={onLogIn}/>
             </div>
         </main>
     )

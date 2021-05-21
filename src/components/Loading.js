@@ -1,35 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import axios from 'axios';
 import logo from '../resources/images/logo.png';
 import gear from '../resources/images/gear.png';
 
-export default function Loading(props) {
+export default function Loading({userLogged}) {
     const [redirect, setRedirect ] = useState('');
     
     useEffect(() =>  {
-        axios.get('http://localhost:5000/', { withCredentials: true })
-            .then(res => {
-                let user = res.data;
-                if (res.data !== null) {
-                    console.log(user);
-                    props.onAuth(user);
-                    setTimeout(() => {
-                        setRedirect('/feed');
-                    }, 1200);
-                } else {
-                    console.log(user);
-                    props.onAuth(user);
-                    setTimeout(() => {
-                        setRedirect('/auth');
-                    }, 1200);
-                }
-            })
-            .catch(e => {
-                console.log(e);
-                setRedirect('/auth');
-            })
-    })
+        console.log('Loading user:', userLogged);
+        if (!userLogged) {
+            setRedirect('/auth');
+        } else if (userLogged) {
+            setRedirect('/feed');
+        } else {
+            console.log('Loading issue, user: ', userLogged);
+        }
+    }, [userLogged]);
 
     return(
         <div id='loading-page'>

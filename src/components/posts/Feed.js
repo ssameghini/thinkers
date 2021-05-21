@@ -8,6 +8,7 @@ export default class Feed extends Component {
         super(props);
 
         this.postsList = this.postsList.bind(this);
+        this.updatePostsList = this.updatePostsList.bind(this);
 
         this.state = {
             posts : [{
@@ -26,6 +27,10 @@ export default class Feed extends Component {
                 date: new Date().toString()
             }]
         };
+    }
+
+    updatePostsList(post){
+        this.setState({posts: [post, ...this.state.posts]});
     }
     
     postsList() {
@@ -74,7 +79,7 @@ export default class Feed extends Component {
                 <section id='feed'>
                     { this.postsList() }
                 </section>
-                <SendBox location={this.props.location.pathname}/>
+                <SendBox location={this.props.location.pathname} onSubmit={this.updatePostsList}/>
             </div>
         )
     }

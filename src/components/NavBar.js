@@ -12,7 +12,7 @@ function NavBar(props) {
                 <figcaption className='thinkers-sign'><em>Thinkers</em></figcaption>
             </figure>
             <nav id='navbar'>
-                <NavLink to='/' exact activeClassName='active-nav-link'>My Feed</NavLink>
+                <NavLink to='/feed' exact activeClassName='active-nav-link'>My Feed</NavLink>
                 <NavLink to='/user' activeClassName='active-nav-link' 
                     onMouseEnter={() => { setIsShown(true) }}
                     onMouseLeave={() => { setIsShown(false) }}>
